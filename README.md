@@ -1,1 +1,1 @@
-"# dip-online" 
+Digital Image Processing Online
