@@ -20,7 +20,6 @@ templates = Jinja2Templates(directory='templates')
 @app.post("/uploadfiles/", response_class=HTMLResponse)
 async def create_upload_files(request: Request, resultLimit: int = Form(...), file: UploadFile = File(...)):
     res = await get_neighbors(resultLimit)
-    print(res)
     return templates.TemplateResponse('first.html',
                                       {"request": request,
                                        "list": res,
@@ -29,3 +28,5 @@ async def create_upload_files(request: Request, resultLimit: int = Form(...), fi
 
 
 app.mount('/', StaticFiles(directory='static', html=True), name='static')
+
+app.mount('/images', StaticFiles(directory='images'), name='images')
