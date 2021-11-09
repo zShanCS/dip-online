@@ -28,5 +28,3 @@ async def create_upload_files(request: Request, resultLimit: int = Form(...), fi
 
 
 app.mount('/', StaticFiles(directory='static', html=True), name='static')
-
-app.mount('/images', StaticFiles(directory='images'), name='images')
