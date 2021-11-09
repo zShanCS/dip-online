@@ -1,26 +1,31 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+import random
 
+from starlette.requests import Request
 app = FastAPI()
 
 
-@app.get('/')
-def index():
-    return {'data': 'hello world'}
+async def get_neighbors(limit: int):
+    list = []
+    for i in range(limit):
+        list.append(random.randint(0, 10000))
+    return list
+
+templates = Jinja2Templates(directory='templates')
 
 
-@app.get('/about')
-def about():
-    return {'data': 'i am about'}
+@app.post("/uploadfiles/", response_class=HTMLResponse)
+async def create_upload_files(request: Request, resultLimit: int = Form(...), file: UploadFile = File(...)):
+    res = await get_neighbors(resultLimit)
+    print(res)
+    return templates.TemplateResponse('first.html',
+                                      {"request": request,
+                                       "list": res,
+                                       "limit": resultLimit}
+                                      )
 
 
-@app.get('/list')
-# query has limit in it e.g. domain.com/list?limit=10
-def get_list(limit: int = 10, published: bool = True):
-    if published:
-        return {
-            'data': f'{limit} list items but published only'
-        }
-    else:
-        return {
-            'data': f'{limit} list items only (not published excluded)'
-        }
+app.mount('/', StaticFiles(directory='static', html=True), name='static')
