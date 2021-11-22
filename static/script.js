@@ -11,7 +11,7 @@ form.addEventListener('submit', async(e) => {
         body: new FormData(form)
     })
     const images = await res.json();
-    data = images.map(i => `<img src="/images/${i}.png" />`)
+    data = images.map(i => `<img src="/images/${i}.png" alt=`image ${i}` />`)
 
     console.log(data)
     show.innerHTML = data.join('')
